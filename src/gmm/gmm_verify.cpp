@@ -24,10 +24,10 @@ int read_gmms(const Directory &dir, const Ext &ext, const vector<string> &gmm_fi
 
 float verify(const GMM &gmm_candidate, const fmatrix &dat) {
 
-  /// \TODO
+  /// \TODO HECHO
   /// Implement verification score based on gmm of the candidate.
 
-  float score = 0.0F;
+  float score = gmm_candidate.logprob(dat);
   return score;
 }
 
@@ -35,12 +35,12 @@ float verify(const GMM &gmm_candidate, const fmatrix &dat) {
 float verify(const GMM &gmm_candidate, const GMM & gmm_world, const fmatrix &dat,
 	     float &lprobcand, float &lprobbackground) {
 
-  /// \TODO
+  /// \TODO HECHO
   /// Implement verification score based on the gmm of the candidate and the 'world' model.
-  float score = 0.0F;
-  lprobcand = 0.0F;
-  lprobbackground = 0.0F;
-
+  
+  lprobcand = gmm_candidate.logprob(dat);
+  lprobbackground =gmm_world.logprob(dat);
+  float score = lprobcand-lprobbackground;
 
   return score;
 
@@ -153,7 +153,7 @@ int read_gmms(const Directory &dir, const Ext &ext, const vector<string> &filena
       return -1;
     }
     vgmm[filenames[i]] = gmm;
-    //    gmm.print(cout) << "----------------------\n";
+        //gmm.print(cout) << "----------------------\n";
   }
   return 0;
 }

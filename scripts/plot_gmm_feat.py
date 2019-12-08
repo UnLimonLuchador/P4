@@ -91,7 +91,7 @@ def limsGMM(means, covs, fStd=3):
 
     return min_, max_
 
-def plotGMM(fileGMM, xDim, yDim, percents, colorGmm, filesFeat=None, colorFeat=None, limits=None, subplot=111):
+def plotGMM(fileGMM,gmm_name,loc_name, xDim, yDim, percents, colorGmm, filesFeat=None, colorFeat=None, limits=None, subplot=111):
     weights, means, covs = read_gmm(fileGMM)
 
     ax = plt.subplot(subplot)
@@ -139,7 +139,7 @@ def plotGMM(fileGMM, xDim, yDim, percents, colorGmm, filesFeat=None, colorFeat=N
     fmt = {levels[i]: f'{percents[i]:.0%}' for i in range(len(levels))}
     ax.clabel(CS, inline=1, fontsize=14, fmt=fmt)
 
-    plt.title(f'Region coverage predicted by {fileGMM}')
+    plt.title(f'GMM:{gmm_name}, LOC:{loc_name}')
     plt.axis('tight')
     plt.axis(limits)
     plt.show()
@@ -162,6 +162,8 @@ Options:
     --colorGMM STR, -g STR            Color of the GMM regions boundaries [default: red]
     --colorFEAT STR, -f STR           Color of the feature population [default: red]
     --limits xyLimits -l xyLimits     xyLimits are the four values xMin,xMax,yMin,yMax [default: auto]
+    --n name of the gmm
+    --l name of the locutor
 
     --help, -h                        Shows this message
 '''
@@ -171,6 +173,8 @@ if __name__ == '__main__':
 
     fileGMM = args['<file-gmm>']
     filesFeat = args['<file-feat>']
+    gmm_name = args['--n']
+    loc_name = args['--l']
     xDim = int(args['--xDim'])
     yDim = int(args['--yDim'])
     percents = args['--percents']
@@ -188,5 +192,5 @@ if __name__ == '__main__':
     else:
         limits = None
 
-    plotGMM(fileGMM, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits, 111)
+    plotGMM(fileGMM,gmm_name,loc_name,xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits, 111)
 

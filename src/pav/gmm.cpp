@@ -1,4 +1,4 @@
-/* Copyright (C) Universitat Politècnica de Catalunya, Barcelona, Spain.
+/* Copyright (C) Universitat Politï¿½cnica de Catalunya, Barcelona, Spain.
  *
  * Permission to copy, use, modify, sell and distribute this software
  * is granted provided this copyright notice appears in all copies.
@@ -100,7 +100,7 @@ namespace upc {
     return log_prob_x;
   }
 
-  /// \TODO Compute the logprob for the whole input data.
+  /// \TODO HECHO Compute the logprob for the whole input data.
   float GMM::logprob(const fmatrix &data) const {    
 
     if (nmix == 0 or vector_size == 0 or vector_size != data.ncol())
@@ -110,7 +110,8 @@ namespace upc {
     unsigned int n;
 
     for (n=0; n<data.nrow(); ++n) {
-      /// \TODO Compute the logprob of a single frame of the input data; you can use gmm_logprob() above.
+      /// \TODO HECHO Compute the logprob of a single frame of the input data; you can use gmm_logprob() above.
+      lprob += gmm_logprob(data[n]);
     }    
     return lprob/n;
   }
@@ -202,10 +203,18 @@ namespace upc {
     
     fmatrix weights(data.nrow(), nmix);
     for (iteration=0; iteration<max_it; ++iteration) {
-      /// \TODO Complete the loop in order to perform EM, and implement the stopping criterion.
+      /// \TODO HECHO Complete the loop in order to perform EM, and implement the stopping criterion.
 	  ///
 	  /// EM loop: em_expectation + em_maximization.
 	  ///
+    new_prob = em_expectation(data,weights);
+    inc_prob = abs(new_prob-old_prob);
+    old_prob = new_prob;
+    if(abs(inc_prob)<abs(inc_threshold)){
+cout << "\tnew_prob:"<< new_prob << "\told_prob"<< old_prob<<"\tInc_prob:" << inc_prob << "\tInc_threshold" << inc_threshold << endl;
+          return 0;
+    }    
+    em_maximization(data,weights);   
       /// Update old_prob, new_prob and inc_prob in order to stop the loop if logprob does not
       /// increase more than inc_threshold.
       if (verbose & 01)
